@@ -54,7 +54,7 @@ anchor Teleporters:  # teleporter access
   conn WindtornRuins.RuinsTP:
     moki: InnerRuinsTP, Burrow
   conn WillowsEnd.InnerTP:
-    moki: WillowTP
+    moki: WillowTP, Burrow
 
 anchor MarshSpawn.Main at -799, -4310:  # spawn location / inkwater well
   refill Full
@@ -305,12 +305,11 @@ anchor MarshSpawn.BurrowsEntry at -931, -4494:  # At the bells puzzle
       Bash, DoubleJump, Glide
       Bash, Launch
     gorlek:
+      Bash, DoubleJump, Dash
       Bash, Glide
       Bash, Grenade=1, Sword
       Bash, SentryJump=1, Sword
-    unsafe:
-      # Bash, Grenade=1, Hammer, Damage=10  # dboost at the start, bashgrenade at the end, too precise for gorlek
-      Bash, Hammer, Damage=10
+    unsafe: Bash  # fun
   # needs backwards connection
 
 anchor MarshSpawn.DenApproach at -540, -4406:  # at regen tree
@@ -619,6 +618,9 @@ anchor DenShrine at -328, -4569:
 # checkpoint at -514, -4549
 
 anchor HowlsDen.DoubleJumpTreeArea at -555, -4552:  # At the Double Jump Tree
+  state HowlsDen.BoneBarrier:
+    unsafe: free  # good game yes
+
   pickup HowlsDen.DoubleJumpTree: free
   pickup HowlsDen.StickyShard: free  # origlow
   pickup HowlsDen.DoubleJumpEX:
@@ -1502,18 +1504,31 @@ anchor EastHollow.MapMoki at -106, -4221:  # after crossing the voicelocked door
     moki: Bash, DoubleJump OR Dash OR Glide OR Launch
     gorlek: Bash
 
-  conn GladesTown.Teleporter:
-    moki: Bash, DoubleJump OR Launch
+  conn EastHollow.OutsideGlades:
+    moki:
+      DoubleJump, Bash
+      Launch
     gorlek:
       Bash, Grenade=1, Dash
       Bash, SentryJump=1, Dash
       Bash, Damage=10
     unsafe:
       Bash, Grenade=1
-      SentryJump=1, DoubleJump, TripleJump, Sentry=4  # Sentry redirect the shot to break the wall
+      SentryJump=1, DoubleJump, TripleJump
       # Bash, EastHollow.BeetleDefeated, Sword  # Long Squonkey Lure using Bash Climbing
       Grenade=5, Damage=10, EastHollow.BeetleDefeated    # Grenade Redirect and Grenade Jumps
   # backwards connections can't cross the door; having Voice should always imply an easier way of getting on the other side
+
+anchor EastHollow.OutsideGlades at -152, -4164:  # Outside Grom's Wall
+  state GladesTown.GromsWall:
+    moki: Bash
+    unsafe:
+      Deflector, Sword OR Hammer
+      Grenade=1 OR Sentry=1
+
+  conn GladesTown.Teleporter:
+    moki: GladesTown.GromsWall
+  conn EastHollow.MapMoki: free
 
 anchor EastHollow.AboveBash at -28, -4233:  # At the breakable floor to Bash tree
   refill Checkpoint
@@ -1810,6 +1825,8 @@ anchor GladesTown.Teleporter at -307, -4153:  # The glades teleporter
     unsafe, GladesTown.ClearThorns:
       Water, Bash, Grenade=1  # unsafe because of precision. Good for kii.
       Water, Grenade=2  # Grenade Water Jumps
+  pickup GladesTown.CaveBurrowEX:
+    unsafe: free  # heehee
 
   conn Teleporters: free
   conn GladesTown.TwillenHome: free
@@ -1891,8 +1908,9 @@ anchor GladesTown.Teleporter at -307, -4153:  # The glades teleporter
       Bash, Grenade=1
     gorlek: InnerWellspring.WaterEscape, SentryJump=1 OR Burrow OR Dash
     unsafe: InnerWellspring.WaterEscape, Shuriken=1 OR Sword OR Hammer OR Grenade=1 OR Sentry=1 OR Flash OR Spear=1
-    # seed paths tbd if ever necessary
-# connection to hollow currently redundant with the wall in the way
+    # seed paths tbd if ever Necessary
+  conn EastHollow.OutsideGlades:
+    moki: GladesTown.GromsWall
 
 # checkpoint at -297, -4139
 
@@ -2292,7 +2310,10 @@ anchor WestGlades.Lower at -545, -4113:  # The right edge of the first pool past
 #       Sword, RangedWeapon OR Sentry=1  # Sword Float over then back
 #       Hammer, Sentry=2
 #       Hammer, RangedWeapon, Sentry=1  # Midair Hammer Sentry
-# procrastinating these a bit
+# procrastinating these a bit //TODO
+
+  state GladesTown.GromsWall:
+    unsafe: Bash, Launch
 
   pickup WestGlades.GrappleEX:
     moki:
@@ -7319,11 +7340,6 @@ anchor UpperWastes.KeystoneRoom at 1900, -3831:  # Autosave underneath keystone 
 anchor UpperWastes.MissilePuzzleLeft at 1937, -3794:  # Immediately to the right of the sand after the keystone door
   refill Checkpoint
 
-  state UpperWastes.LeverDoor:
-    moki: Burrow, Bash
-    gorlek: Burrow, Damage=14  # take the hit
-    unsafe: Burrow, Dash OR Launch  # Dash/Launch to avoid the explosion.
-
   pickup UpperWastes.LedgeEC:
     moki:
       Burrow, Bash, DoubleJump OR Dash
@@ -7337,25 +7353,37 @@ anchor UpperWastes.MissilePuzzleLeft at 1937, -3794:  # Immediately to the right
       SentryJump=1
   pickup UpperWastes.MissileSpawnEX:
     moki: Burrow
-  pickup UpperWastes.PurpleWallEX:
-    moki: Combat=MaceMiner, Burrow
-    unsafe: Burrow  # hug the right wall before impact
   pickup UpperWastes.KSDoorEX:
     moki: UpperWastes.KeystoneDoor, Burrow
 
   conn UpperWastes.KeystoneRoom:
     moki: UpperWastes.KeystoneDoor, Burrow
+  conn UpperWastes.MissilePuzzleMiddle:
+    moki: Burrow
+
+anchor UpperWastes.MissilePuzzleMiddle at 2005, -3802:  # On top of the sand beneath the lever
+  refill Checkpoint:
+    gorlek: Burrow, Bash OR Damage=14
+    unsafe: Burrow, Dash OR Launch
+
+  state UpperWastes.LeverDoor:
+    moki: Burrow, Bash
+    gorlek: Burrow, Damage=14  # take the hit
+    unsafe: Burrow, Dash OR Launch  # Dash/Launch to avoid the explosion.
+
+  pickup UpperWastes.PurpleWallEX:
+    moki: Combat=MaceMiner, Burrow
+    unsafe: Burrow  # hug the right wall before impact
+
+  conn UpperWastes.MissilePuzzleLeft:  # for better random spawn
+    gorlek: Burrow, Bash
+    unsafe: Burrow, Damage=14
   conn UpperWastes.MissilePuzzleRight:
     moki: UpperWastes.LeverDoor, Burrow
-
-# checkpoint at 2016, -3790
 
 anchor UpperWastes.MissilePuzzleRight at 2058, -3813:  # On top of sand to the right of lever gate, underneath a laser.
   pickup UpperWastes.PurpleWallHC:
     moki: Burrow
-  pickup UpperWastes.PurpleWallEX:  # for better random spawn
-    moki: Combat=MaceMiner, Burrow
-    unsafe: Burrow  # hug the right wall before impact
 
   conn UpperWastes.RuinsApproach:  # this covers all connections to the pickups in the spinning lasers.
     moki:
@@ -7367,9 +7395,8 @@ anchor UpperWastes.MissilePuzzleRight at 2058, -3813:  # On top of sand to the r
       Burrow, Glide, DoubleJump OR Bash OR SentryJump=1 OR Damage=30  # same as above
       Burrow, DoubleJump, TripleJump OR Dash OR Glide
     unsafe: Burrow
-  conn UpperWastes.MissilePuzzleLeft:  # for better random spawn
-    gorlek: UpperWastes.LeverDoor, Burrow, Bash
-    unsafe: UpperWastes.LeverDoor, Burrow, Damage=14
+  conn UpperWastes.MissilePuzzleMiddle:  # for better random spawn
+    moki: UpperWastes.LeverDoor, Burrow
 
 # checkpoint at 2037, -3751
 
@@ -8160,6 +8187,16 @@ anchor OpherShop:  # Opher's offers
   pickup OpherShop.Sentry:  # used for keystones if necessary; filtered by gen
     moki: SpiritLight=1200
   pickup OpherShop.Teleport:
+    moki: SpiritLight=1200
+  pickup OpherShop.ShockSmash:
+    moki: SpiritLight=1200
+  pickup OpherShop.StaticStar:
+    moki: SpiritLight=1200
+  pickup OpherShop.ExplodingSpike:
+    moki: SpiritLight=1200
+  pickup OpherShop.RapidSentry:
+    moki: SpiritLight=1200
+  pickup OpherShop.ChargeBlaze:
     moki: SpiritLight=1200
   pickup OpherShop.WaterBreath:
     moki: InnerWellspring.WaterEscape, SpiritLight=1200

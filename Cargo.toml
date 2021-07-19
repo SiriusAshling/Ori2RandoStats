@@ -7,5 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-seedgen = { git = "https://github.com/sparkle-preference/OriWotwRandomizerClient" }
+seedgen = { path = "../OriWotwRandomizerClient/projects/SeedGenCli" }
+# seedgen = { git = "https://github.com/sparkle-preference/OriWotwRandomizerClient" }
 rand = "0.8.3"
+log = "0.4"

@@ -1,0 +1,45 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'ori2_rando_stats'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=ori2_rando_stats",
+                    "--package=ori2_rando_stats"
+                ],
+                "filter": {
+                    "name": "ori2_rando_stats",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'ori2_rando_stats'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=ori2_rando_stats",
+                    "--package=ori2_rando_stats"
+                ],
+                "filter": {
+                    "name": "ori2_rando_stats",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

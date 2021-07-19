@@ -290,6 +290,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "open"
+version = "1.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dcea7a30d6b81a2423cc59c43554880feff7b57d12916f231a79f8d6d9470201"
+dependencies = [
+ "pathdiff",
+ "winapi",
+]
+
+[[package]]
 name = "ordered-float"
 version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -302,6 +312,7 @@ dependencies = [
 name = "ori2_rando_stats"
 version = "0.1.0"
 dependencies = [
+ "log",
  "rand",
  "seedgen",
 ]
@@ -330,6 +341,12 @@ dependencies = [
  "smallvec",
  "winapi",
 ]
+
+[[package]]
+name = "pathdiff"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "877630b3de15c0b64cc52f659345724fbf6bdad9bd9566699fc53688f3c34a34"
 
 [[package]]
 name = "ppv-lite86"
@@ -481,15 +498,16 @@ checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
 [[package]]
 name = "seedgen"
 version = "0.13.0"
-source = "git+https://github.com/sparkle-preference/OriWotwRandomizerClient#41972bb81d2eaaf7ae938b325709f91092b9bc22"
 dependencies = [
  "ansi_term 0.12.1",
  "atty",
  "bugsalot",
  "log",
  "log4rs",
+ "open",
  "rand",
  "rand_seeder",
+ "regex",
  "rustc-hash",
  "serde",
  "serde_json",
